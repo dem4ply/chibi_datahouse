@@ -11,10 +11,10 @@ elastic_env_vars = donkey.inflate(
 
 for e in elastic_env_vars.values():
     e[ 'hosts' ] = [ e[ 'hosts' ] ]
-    e[ 'http_auth' ] = ( e[ 'user' ], e[ 'password' ] )
-    e[ 'ca_certs' ]: certifi.where()
-    e[ 'use_ssl' ]: True
-    e[ 'verify_certs' ]: True
+    #e[ 'http_auth' ] = ( e[ 'user' ], e[ 'password' ] )
+    #e[ 'ca_certs' ]: certifi.where()
+    #e[ 'use_ssl' ]: True
+    #e[ 'verify_certs' ]: True
     e[ 'timeout' ] = int( e[ 'timeout' ] )
 
 

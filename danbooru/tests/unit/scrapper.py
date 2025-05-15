@@ -69,3 +69,33 @@ class Test_scan_index( VCRTestCase ):
     def test_post_should_have_source( self ):
         self.assertTrue( self.post.source )
         self.assertIsInstance( self.post.source, Chibi_url )
+
+
+class Test_post_wihtout_link_source( VCRTestCase ):
+    def _get_vcr_kwargs( self, **kw ):
+        kw[ 'ignore_hosts' ] = [ 'waifus', 'localhost' ]
+        return kw
+
+    def setUp( self ):
+        super().setUp()
+        self.post = Danbooru_post(
+            'https://danbooru.donmai.us/posts/9102556' )
+
+    def test_should_work( self ):
+        self.assertTrue( self.post.source )
+        self.assertIsInstance( self.post.source, str )
+
+
+class Test_post_need_gold( VCRTestCase ):
+    def _get_vcr_kwargs( self, **kw ):
+        kw[ 'ignore_hosts' ] = [ 'waifus', 'localhost' ]
+        return kw
+
+    def setUp( self ):
+        super().setUp()
+        self.post = Danbooru_post(
+            'https://danbooru.donmai.us/posts/9102880' )
+
+    def test_should_work( self ):
+        self.assertTrue( self.post.title )
+        self.assertIsInstance( self.post.title, str )

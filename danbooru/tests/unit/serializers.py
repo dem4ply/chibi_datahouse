@@ -41,3 +41,12 @@ class Test_serializer_post( VCRTestCase ):
         self.assertEqual(
             serializer.validated_data[ 'create_at' ].isoformat(),
             date.isoformat() )
+
+    def test_serializer_url_should_not_have_params( self, *args, **kw ):
+        self.post = Danbooru_post(
+            'https://danbooru.donmai.us/posts/9108763?q=2koma' )
+        serializer = Post_serializer( data=self.post.info )
+        serializer.is_valid( raise_exception=True )
+        model = serializer.save()
+        self.assertEqual(
+            model.url, 'https://danbooru.donmai.us/posts/9108763' )

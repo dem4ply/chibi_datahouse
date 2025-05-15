@@ -1,6 +1,6 @@
 from celery.utils.log import get_task_logger
 
-from .task_class import Task_base
+from .tasks_class import Task_base
 from chibi_datahouse.app_celery import chibi_datahouse_task as celery_task
 
 

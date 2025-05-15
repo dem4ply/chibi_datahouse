@@ -78,6 +78,9 @@ class Danbooru_post( Chibi_site ):
     @property
     def title( self ):
         image = self.soup.select_one( 'img#image' )
+        if image is None:
+            title, trash = self.soup.title.text.rsplit( '|' )
+            return title.strip()
         return image.attrs[ 'alt' ]
 
     @property
@@ -94,6 +97,9 @@ class Danbooru_post( Chibi_site ):
     @property
     def source( self ):
         info = self.soup.select_one( 'li#post-info-source a' )
+        if info is None:
+            info = self.soup.select_one( 'li#post-info-source' )
+            return info.text
         return Chibi_url( info.attrs[ 'href' ] )
 
     def get_tags( self, name ):

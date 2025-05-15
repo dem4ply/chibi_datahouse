@@ -12,14 +12,14 @@ elastic_logger_env_vars = donkey.inflate(
     lower_keys( get_regex( os.environ, r'LOGGER__ELASTIC__.+' ) ) )
 
 for e in elastic_logger_env_vars[ 'logger' ][ 'elastic' ].values():
-    e[ 'auth_details' ] = ( e[ 'user' ], e[ 'password' ], )
+    # e[ 'auth_details' ] = ( e[ 'user' ], e[ 'password' ], )
     e[ 'auth_type' ] = CMRESHandler.AuthType.BASIC_AUTH
     # e[ 'ca_certs' ] = certifi.where()
     e[ 'class' ] = 'cmreslogging.handlers.CMRESHandler'
     e[ 'flush_frequency_in_sec' ] = int( e[ 'flush_frequency_in_sec' ] )
     e[ 'hosts' ] = [ e[ 'hosts' ] ]
-    e[ 'use_ssl' ] = True
-    e[ 'verify_ssl' ] = True
+    # e[ 'use_ssl' ] = True
+    # e[ 'verify_ssl' ] = True
 
     e[ 'es_additional_fields' ] = {
         'app': app_name, 'tags': [ 'reader_moe', app_name ] }

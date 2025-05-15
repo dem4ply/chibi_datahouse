@@ -3,14 +3,16 @@ import json
 from six.moves.urllib import request
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
-
+from chibi.parser import to_bool
 
 env = os.environ.get( 'CHIBI_DATAHOUSE__ENVIRONMENT', 'local' ).lower()
 
 is_production = env == 'production'
 
 PROJECT_NAME = 'chibi_datahouse'
-TEST_MODE = bool( os.environ.get( 'CHIBI_DATAHOUSE__TEST_MODE', False ) )
+TEST_MODE = to_bool( os.environ.get( 'CHIBI_DATAHOUSE__TEST_MODE', False ) )
+
+print( 'TEST_MODE: {}'.format( TEST_MODE ) )
 
 SECRET_KEY = os.environ.get( 'CHIBI_DATAHOUSE__SECRET_KEY', '' )
 DEBUG = not is_production

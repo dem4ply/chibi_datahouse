@@ -24,28 +24,11 @@ gunicorn>=20.1.0
 setproctitle>=1.1.10
 
 factory-boy
-flake8
-pycodestyle
-coverage
 
-Sphinx
-sphinx-intl
-sphinx-rtd-theme
-sphinxcontrib-httpdomain
-sphinxcontrib-plantuml
-# sphinxcontrib-spelling
-
-
-vcrpy-unittest
-
-ipython
-
-
-certifi
-
-
-#django_rest_marshmallow==4.0.1
 cryptography
+
+elasticsearch-dsl>=7.4.1
+elasticsearch-dsl<=8
 
 
 chibi_site

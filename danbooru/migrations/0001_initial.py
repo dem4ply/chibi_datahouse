@@ -7,8 +7,12 @@ def create_post_index( apps, schema_editor ):
     if not Post._index.exists():
         Post.init()
 
+def delete_post_index( apps, schema_editor ):
+    if not Post._index.exists():
+        Post.init()
 
-class Migration(migrations.Migration):
+
+class Migration( migrations.Migration ):
 
     initial = True
 
@@ -16,5 +20,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython( create_post_index ),
+        migrations.RunPython( create_post_index, delete_post_index ),
     ]

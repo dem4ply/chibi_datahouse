@@ -1,4 +1,6 @@
-from danbooru.tasks import debug_task, scan_page, scan_post
+from danbooru.tasks import (
+    debug_task, scan_page, scan_post, should_scan_post,
+)
 import datetime
 import unittest
 from unittest.mock import patch, Mock
@@ -49,3 +51,57 @@ class Test_scan_index( VCRTestCase ):
         model = Post_model.get( id=post_id )
         self.assertTrue( model )
         self.assertEqual( model.pk, post_id )
+
+    @patch( 'danbooru.tasks.scan_post' )
+    def test_validate_post_should_run_when_is_not_in_ES(
+            self, scan_post_mock, *args, **kw ):
+        url = 'https://danbooru.donmai.us/posts/9072492'
+        if Post_model.exists( id='9072492' ):
+            model = Post_model.get( id='9072492' )
+            model.delete()
+            Post_model._index.flush()
+        self.assertFalse( Post_model.exists( id='9072492' ) )
+        should_scan_post( url )
+
+        scan_post_mock.delay.assert_called_with( url )
+
+    @patch( 'danbooru.tasks.scan_post' )
+    def test_validate_post_should_not_run_when_is_in_ES(
+            self, scan_post_mock, *args, **kw ):
+        url = 'https://danbooru.donmai.us/posts/9072492'
+        if not Post_model.exists( id='9072492' ):
+            scan_post( url )
+            Post_model._index.flush()
+        self.assertTrue( Post_model.exists( id='9072492' ) )
+        should_scan_post( url )
+        Post_model._index.flush()
+
+        scan_post_mock.delay.assert_not_called
+
+    @patch( 'danbooru.tasks.scan_post' )
+    def test_validate_post_with_params_should_run_when_is_not_in_ES(
+            self, scan_post_mock, *args, **kw ):
+        url = 'https://danbooru.donmai.us/posts/9103704?q=2koma'
+        if Post_model.exists( id='9103704' ):
+            model = Post_model.get( id='9103704' )
+            model.delete()
+            Post_model._index.flush()
+        self.assertFalse( Post_model.exists( id='9103704' ) )
+        should_scan_post( url )
+
+        scan_post_mock.delay.assert_called_with( url )
+
+    @patch( 'danbooru.tasks.scan_post' )
+    def test_validate_post_with_params_should_not_run_when_is_in_ES(
+            self, scan_post_mock, *args, **kw ):
+        url = 'https://danbooru.donmai.us/posts/9103704?q=2koma'
+        if not Post_model.exists( id='9103704' ):
+            scan_post( url )
+            Post_model._index.flush()
+        self.assertTrue( Post_model.exists( id='9103704' ) )
+        should_scan_post( url )
+        Post_model._index.flush()
+
+        scan_post_mock.delay.assert_not_called
+
+

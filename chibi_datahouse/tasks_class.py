@@ -30,6 +30,10 @@ class Task_base( celery_task.Task ):
             'task_id': task_id,
             'params': { 'args': args, 'kargs': kwargs },
         }
-
-        logger.error( "fail task %s" % task_id, exc_info=exc, extra=extra )
-        super().on_failure( task_id, exc, args, kwargs, einfo )
+        if self.request.retries >= self.max_retries:
+            logger.error( "fail task %s" % task_id, exc_info=exc, extra=extra )
+            super().on_failure( task_id, exc, args, kwargs, einfo )
+        else:
+            logger.error(
+                "retry task %s" % task_id, exc_info=exc, extra=extra )
+            self.retry()

@@ -1,3 +1,4 @@
+from chibi_requests import Chibi_url
 from .models import Post as Post_model
 from rest_framework import serializers
 
@@ -26,6 +27,7 @@ class Post( serializers.Serializer ):
         model = Post_model
 
     def create( self, data, **kw ):
+        data[ 'url' ] = Chibi_url( data[ 'url' ] ).url
         model = self.Meta.model( **data )
         model.save()
         return model
