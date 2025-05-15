@@ -73,7 +73,7 @@ To run a celery worker:
 .. code-block:: bash
 
     cd chibi_datahouse
-    celery -A config.celery_app worker -l info
+    celery -A chibi_datahouse worker -c 1 -B
 
 Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
 
