@@ -12,28 +12,36 @@ class Task_base( celery_task.Task ):
     def on_success( self, retval, task_id, args, kwargs ):
         extra = {
             'task_id': task_id,
+            'task_name': self.name,
             'params': { 'args': args, 'kargs': kwargs },
         }
-        logger.info( "sucess task %s" % task_id, extra=extra )
+        logger.info( f"sucess task {self.name} ( {task_id} )", extra=extra )
         super().on_success( retval, task_id, args, kwargs )
 
     def on_retry( self, exc, task_id, args, kwargs, einfo ):
         extra = {
             'task_id': task_id,
+            'task_name': self.name,
             'params': { 'args': args, 'kargs': kwargs },
         }
-        logger.error( "retry task %s" % task_id, exc_info=exc, extra=extra )
+        logger.error(
+            f"retry task {self.name} ( {task_id} )",
+            exc_info=exc, extra=extra )
         super().on_retry( exc, task_id, args, kwargs, einfo )
 
     def on_failure( self, exc, task_id, args, kwargs, einfo ):
         extra = {
             'task_id': task_id,
+            'task_name': self.name,
             'params': { 'args': args, 'kargs': kwargs },
         }
         if self.request.retries >= self.max_retries:
-            logger.error( "fail task %s" % task_id, exc_info=exc, extra=extra )
+            logger.error(
+                f"fail task {self.name} ( {task_id} )",
+                exc_info=exc, extra=extra )
             super().on_failure( task_id, exc, args, kwargs, einfo )
         else:
             logger.error(
-                "retry task %s" % task_id, exc_info=exc, extra=extra )
+                f"retry task {self.name} ( {task_id} )",
+                exc_info=exc, extra=extra )
             self.retry()

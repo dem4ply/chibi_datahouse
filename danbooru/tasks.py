@@ -69,6 +69,6 @@ def setup_periodic_tasks( sender, **kw ):
     # sender.add_periodic_task( 30.0, test.s( 'world' ), expires=10 )
 
     sender.add_periodic_task(
-        crontab( hour=12, minute=0 ),
+        crontab( hour='*/3', minute=0 ),
         scan_page.s(),
     )
